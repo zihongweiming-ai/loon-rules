@@ -1,0 +1,26 @@
+#!name=旅行极速版去广告
+#!desc=按“携程旅行/旅行极速版”方向制作的 Loon 去广告插件。拦截携程广告域名、首页广告、弹窗、推荐位、搜索页营销位等。若登录、下单、查票异常，请先关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN,ma-adx.ctrip.com,REJECT
+DOMAIN,crm.ws.ctrip.com,REJECT
+DOMAIN,mkt.ctrip.com,REJECT
+DOMAIN,mkt.ctripcorp.com,REJECT
+DOMAIN,ubt.ctrip.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/ma-adx\.ctrip\.com\/.* reject-200
+^https?:\/\/m\.ctrip\.com\/restapi\/.*(tripAds|advert|advertise|adList|adInfo|marketing|promotion|popup|popUp|banner).* reject-dict
+^https?:\/\/m\.ctrip\.com\/restapi\/soa2\/.*\/json\/tripAds.* reject-dict
+^https?:\/\/m\.ctrip\.com\/restapi\/soa2\/.*\/json\/.*(Ad|Ads|Advert|Marketing|Promotion|Popup|Banner).* reject-dict
+
+[Script]
+http-response ^https?:\/\/m\.ctrip\.com\/restapi\/.* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/travel_lite_noads.js,tag=旅行极速版接口净化
+http-response ^https?:\/\/.*\.ctrip\.com\/.* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/travel_lite_noads.js,tag=携程广告净化
+http-response ^https?:\/\/.*\.ctripcorp\.com\/.* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/travel_lite_noads.js,tag=携程营销净化
+
+[MITM]
+hostname = %APPEND% m.ctrip.com, ma-adx.ctrip.com, *.ctrip.com, *.ctripcorp.com
