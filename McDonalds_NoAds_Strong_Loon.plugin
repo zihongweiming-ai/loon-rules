@@ -1,0 +1,27 @@
+#!name=麦当劳去广告增强版
+#!desc=麦当劳中国 App 去广告增强版：扩大匹配麦当劳相关域名，并用脚本清理开屏、弹窗、Banner、营销推荐字段。尽量避开订单、支付、优惠券、会员、菜单等核心字段。若点餐/支付异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 常见第三方广告/统计，轻量拦截
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+# 麦当劳明显广告接口：开屏、弹窗、Banner、活动推荐
+^https?:\/\/.*(?:mcd|mcdonald|mcdonalds|mcdelivery).*\/.*(?:splash|launch|startup|openad|screenad|advert|advertise|advertisement|adlist|adinfo|banner|popup|popbox|marketing|promotion|campaign|recommendad).* reject-dict
+
+# 麦当劳明显广告资源
+^https?:\/\/.*(?:mcd|mcdonald|mcdonalds|mcdelivery).*\/.*(?:splash|launch|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+# 麦当劳接口返回净化：广告混在正常接口里时使用
+http-response ^https?:\/\/.*(?:mcd|mcdonald|mcdonalds|mcdelivery).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/mcdonalds_noads.js,tag=麦当劳广告净化
+
+[MITM]
+hostname = %APPEND% *.mcdonalds.com.cn, *.mcdonalds.com, *.mcd.cn, *.mcdelivery.com.cn, *.mcdelivery.com, *.mcd.com.cn, *.mcd.com
