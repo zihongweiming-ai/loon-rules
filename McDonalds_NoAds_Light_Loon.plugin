@@ -1,0 +1,27 @@
+#!name=麦当劳去广告轻量版
+#!desc=麦当劳中国 App 轻量去广告：只拦开屏、弹窗、Banner、广告/营销接口。不使用脚本净化，尽量避免影响登录、点餐、支付、优惠券和取餐码。若异常，请先关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 第三方广告/统计域名，轻量拦截
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+
+[URL Rewrite]
+# 麦当劳开屏/启动广告
+^https?:\/\/(?:[^\/]+\.)?(?:mcdonalds\.com\.cn|mcd\.cn|mcdelivery\.com\.cn)\/.*(?:splash|launch|startup|startUp|openAd|screenAd).* reject-dict
+
+# 麦当劳弹窗/浮层
+^https?:\/\/(?:[^\/]+\.)?(?:mcdonalds\.com\.cn|mcd\.cn|mcdelivery\.com\.cn)\/.*(?:popup|popUp|popbox|popBox|float|floating|layer).* reject-dict
+
+# 麦当劳广告/Banner/营销推荐
+^https?:\/\/(?:[^\/]+\.)?(?:mcdonalds\.com\.cn|mcd\.cn|mcdelivery\.com\.cn)\/.*(?:advert|advertise|advertisement|adList|adInfo|banner|marketing|promotion|campaign|recommendAd).* reject-dict
+
+# 麦当劳广告图片/资源，返回空响应
+^https?:\/\/(?:[^\/]+\.)?(?:mcdonalds\.com\.cn|mcd\.cn|mcdelivery\.com\.cn)\/.*(?:splash|launch|popup|banner|advert|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[MITM]
+hostname = %APPEND% *.mcdonalds.com.cn, *.mcd.cn, *.mcdelivery.com.cn
