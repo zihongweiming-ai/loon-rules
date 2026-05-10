@@ -1,0 +1,34 @@
+#!name=麦当劳肯德基去广告
+#!desc=针对中国区麦当劳/KFC App 的开屏广告、首页弹窗、Banner、营销推荐位做轻量净化。尽量不影响点餐、取餐、支付、优惠券。若下单/支付/登录异常，请先关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 麦当劳 / 肯德基广告、埋点、营销资源兜底
+DOMAIN-SUFFIX,adsmogo.com,REJECT
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,domob.cn,REJECT
+DOMAIN-SUFFIX,domob.org,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,mmstat.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+
+[URL Rewrite]
+# 明显广告/开屏/弹窗/营销接口，命中才拒绝，不直接拦点餐支付主接口
+^https?:\/\/.*(mcd|mcdonalds|kfc|yumchina|4008823823).*\/.*(splash|launch|startup|advert|advertise|advertisement|adList|adInfo|banner|popup|popUp|popbox|marketing|promotion|campaign|recommend).* reject-dict
+
+# 常见图片/资源广告路径
+^https?:\/\/.*(mcd|mcdonalds|kfc|yumchina|4008823823).*\/.*(splash|launch|popup|banner|advert|ad_|_ad|marketing|promotion).* reject-200
+
+[Script]
+# 麦当劳接口净化
+http-response ^https?:\/\/.*(mcd|mcdonalds|mcd\.cn).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/fastfood_noads.js,tag=麦当劳广告净化
+
+# 肯德基/KFC/百胜中国接口净化
+http-response ^https?:\/\/.*(kfc|yumchina|4008823823).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/fastfood_noads.js,tag=肯德基广告净化
+
+[MITM]
+hostname = %APPEND% *.mcdonalds.com.cn, *.mcd.cn, *.kfc.com.cn, *.yumchina.com, *.4008823823.com.cn
