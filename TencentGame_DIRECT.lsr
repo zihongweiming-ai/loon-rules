@@ -1,0 +1,29 @@
+# 王者荣耀/腾讯游戏直连规则集
+# 导入为 Loon 远程规则时，请选择策略：DIRECT
+# 建议排序：LAN / CN REGION / TencentGame_DIRECT / Tencent / ChinaMax / AdvertisingLite / 其他国外规则 / Final
+
+DOMAIN-SUFFIX,tencentgames.com
+DOMAIN-SUFFIX,game.qq.com
+DOMAIN-SUFFIX,igame.qq.com
+DOMAIN-SUFFIX,sgame.qq.com
+DOMAIN-SUFFIX,tiem-cdn.qq.com
+DOMAIN-SUFFIX,iegcom.qq.com
+DOMAIN-SUFFIX,ieg.tencent.com
+DOMAIN-SUFFIX,ieg.tencent-cloud.net
+
+DOMAIN-SUFFIX,qq.com
+DOMAIN-SUFFIX,tencent.com
+DOMAIN-SUFFIX,myapp.com
+DOMAIN-SUFFIX,wegame.com.cn
+DOMAIN-SUFFIX,gtimg.com
+DOMAIN-SUFFIX,gtimg.cn
+DOMAIN-SUFFIX,qlogo.cn
+
+DOMAIN-SUFFIX,qcloud.com
+DOMAIN-SUFFIX,myqcloud.com
+DOMAIN-SUFFIX,cloud.tencent.com
+DOMAIN-SUFFIX,tencent-cloud.com
+DOMAIN-SUFFIX,tencent-cloud.net
+DOMAIN-SUFFIX,cdntip.com
+DOMAIN-SUFFIX,tcdnlive.com
+DOMAIN-SUFFIX,tlivecdn.com

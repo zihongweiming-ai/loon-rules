@@ -1,0 +1,43 @@
+#!name=王者荣耀/腾讯游戏直连
+#!desc=让王者荣耀、腾讯游戏、腾讯云游戏相关域名尽量走 DIRECT，减少被代理/广告规则/Final 误匹配导致的延迟抖动。建议放在广告规则、国外规则和 Final 之前。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 王者荣耀 / Honor of Kings / 腾讯游戏核心域名
+DOMAIN-SUFFIX,tencentgames.com,DIRECT
+DOMAIN-SUFFIX,game.qq.com,DIRECT
+DOMAIN-SUFFIX,igame.qq.com,DIRECT
+DOMAIN-SUFFIX,sgame.qq.com,DIRECT
+DOMAIN-SUFFIX,tiem-cdn.qq.com,DIRECT
+DOMAIN-SUFFIX,iegcom.qq.com,DIRECT
+DOMAIN-SUFFIX,ieg.tencent.com,DIRECT
+DOMAIN-SUFFIX,ieg.tencent-cloud.net,DIRECT
+
+# 腾讯通用与登录/安全/配置
+DOMAIN-SUFFIX,qq.com,DIRECT
+DOMAIN-SUFFIX,tencent.com,DIRECT
+DOMAIN-SUFFIX,myapp.com,DIRECT
+DOMAIN-SUFFIX,wegame.com.cn,DIRECT
+DOMAIN-SUFFIX,gtimg.com,DIRECT
+DOMAIN-SUFFIX,gtimg.cn,DIRECT
+DOMAIN-SUFFIX,qlogo.cn,DIRECT
+
+# 腾讯云 / CDN / 游戏资源
+DOMAIN-SUFFIX,qcloud.com,DIRECT
+DOMAIN-SUFFIX,myqcloud.com,DIRECT
+DOMAIN-SUFFIX,cloud.tencent.com,DIRECT
+DOMAIN-SUFFIX,tencent-cloud.com,DIRECT
+DOMAIN-SUFFIX,tencent-cloud.net,DIRECT
+DOMAIN-SUFFIX,cdntip.com,DIRECT
+DOMAIN-SUFFIX,tcdnlive.com,DIRECT
+DOMAIN-SUFFIX,tlivecdn.com,DIRECT
+
+# 王者/腾讯游戏常用 UDP 端口，兜底直连
+AND,((PROTOCOL,UDP),(DEST-PORT,8000-9999)),DIRECT
+AND,((PROTOCOL,UDP),(DEST-PORT,10000-20000)),DIRECT
+AND,((PROTOCOL,UDP),(DEST-PORT,30000-60000)),DIRECT
+
+# 国内 IP 兜底直连，避免腾讯游戏连接国内服务器时走代理
+GEOIP,CN,DIRECT
