@@ -1,0 +1,22 @@
+#!name=库迪咖啡去广告
+#!desc=库迪咖啡/Cotti Coffee App 去广告：处理开屏广告、首页弹窗、Banner、营销推荐位。尽量避开登录、点单、支付、优惠券、会员、门店、取餐码等核心字段。若点单/支付异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/.*(?:cotti|cotticoffee).*\/.*(?:splash|launch|startup|openad|screenad|advert|advertise|advertisement|adlist|adinfo|banner|popup|popbox|marketing|promotion|campaign|recommendad).* reject-dict
+^https?:\/\/.*(?:cotti|cotticoffee).*\/.*(?:splash|launch|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+http-response ^https?:\/\/.*(?:cotti|cotticoffee).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/cotti_noads.js,tag=库迪咖啡广告净化
+
+[MITM]
+hostname = %APPEND% *.cotti.com, *.cotticoffee.com, *.cotticoffee.com.cn, *.cotticoffee.co.jp
