@@ -1,0 +1,22 @@
+#!name=肯德基去广告增强版
+#!desc=肯德基/KFC 中国 App 去广告：处理开屏广告、首页弹窗、Banner、营销推荐位。尽量避开登录、点餐、支付、优惠券、会员、菜单、取餐码等核心字段。若下单/支付异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:splash|launch|startup|openad|screenad|advert|advertise|advertisement|adlist|adinfo|banner|popup|popbox|marketing|promotion|campaign|recommendad).* reject-dict
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:splash|launch|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+http-response ^https?:\/\/.*(?:kfc|yumchina|4008823823).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/kfc_noads.js,tag=肯德基广告净化
+
+[MITM]
+hostname = %APPEND% *.kfc.com.cn, *.kfc.com, *.yumchina.com, *.yum.com.cn, *.4008823823.com.cn
