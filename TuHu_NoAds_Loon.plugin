@@ -1,0 +1,27 @@
+#!name=途虎养车去广告
+#!desc=途虎养车 App 去广告：处理开屏广告、首页弹窗、Banner、营销推荐位。尽量避开登录、下单、支付、优惠券、门店、保养预约、车型车牌等核心字段。若下单/支付/预约异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 少量第三方广告/统计域名，轻量拦截
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+# 途虎明显广告接口：开屏、弹窗、Banner、活动推荐
+^https?:\/\/.*(?:tuhu|tuhu\.cn|tuhu\.com|tuhu\.org).*\/.*(?:splash|launch|startup|openad|screenad|advert|advertise|advertisement|adlist|adinfo|banner|popup|popbox|marketing|promotion|campaign|recommendad).* reject-dict
+
+# 途虎明显广告图片/资源
+^https?:\/\/.*(?:tuhu|tuhu\.cn|tuhu\.com|tuhu\.org).*\/.*(?:splash|launch|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+# 途虎接口返回净化：广告混在正常接口里时使用
+http-response ^https?:\/\/.*(?:tuhu|tuhu\.cn|tuhu\.com|tuhu\.org).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads.js,tag=途虎养车广告净化
+
+[MITM]
+hostname = %APPEND% *.tuhu.cn, *.tuhu.com, *.tuhu.org, *.tuhu.com.cn
