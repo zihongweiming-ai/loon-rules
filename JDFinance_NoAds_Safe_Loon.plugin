@@ -1,0 +1,37 @@
+#!name=京东金融去广告保守版
+#!desc=京东金融 App 去广告保守版：只拦截明显开屏广告、加载广告、弹窗广告、广告平台接口。不改账户、支付、借款、理财、白条、金条、银行卡、登录等核心接口。若登录/支付/还款/理财异常，请立即关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 京东广告平台
+DOMAIN,dsp-x.jd.com,REJECT
+DOMAIN,bdsp-x.jd.com,REJECT
+DOMAIN,ads-union.jd.com,REJECT
+DOMAIN-SUFFIX,ads.union.jd.com,REJECT
+DOMAIN,du.jd.com,REJECT
+DOMAIN,u-x.jd.com,REJECT
+DOMAIN-SUFFIX,360yield.com,REJECT
+
+# 少量第三方广告/统计
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+
+[URL Rewrite]
+# 京东金融开屏广告/加载图
+^https?:\/\/ms\.jr\.jd\.com\/gw\/generic\/base\/na\/m\/adInfo.* reject-dict
+^https?:\/\/ms\.jr\.jd\.com\/gw\/generic\/aladdin\/na\/m\/getLoadingPicture.* reject-dict
+
+# 京东金融明显广告/弹窗/推荐位接口
+^https?:\/\/ms\.jr\.jd\.com\/gw\/.*(?:adInfo|getLoadingPicture|advert|advertise|advertisement|adList|adInfo|startup|splash|openAd|screenAd|popup|popUp|popbox|banner|marketing|promotion|recommendAd).* reject-dict
+
+# 京东通用广告平台
+^https?:\/\/b?dsp-x\.jd\.com\/adx\/.* reject-200
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=(start|startup|getLoadingPicture|getPopUpInfo|adQuery|advertisement|queryAd|appAd|feedAd|queryMaterialAdverts).* reject-dict
+
+# 明显广告图片/资源
+^https?:\/\/.*(?:jr\.jd|ms\.jr\.jd|jdfinance|jdjr).*\/.*(?:splash|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[MITM]
+hostname = %APPEND% ms.jr.jd.com, api.m.jd.com, dsp-x.jd.com, bdsp-x.jd.com
