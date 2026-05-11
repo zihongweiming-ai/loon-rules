@@ -1,0 +1,26 @@
+#!name=肯德基去广告保守版
+#!desc=肯德基/KFC 中国 App 去广告保守版：不使用脚本净化，不拦正常接口，只拦明显开屏、弹窗、广告资源和少量第三方广告统计。适合避免点餐、支付、优惠券、取餐码被误杀。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 少量第三方广告/统计域名，尽量不影响点餐业务
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+
+[URL Rewrite]
+# 肯德基开屏广告/启动广告：只匹配明显广告关键词
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:splash|startup|start-up|launch|openad|openAd|screenad|screenAd).* reject-dict
+
+# 肯德基弹窗广告：只匹配明显弹窗关键词
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:popup|popUp|popbox|popBox|pop-layer|popLayer).* reject-dict
+
+# 肯德基广告 Banner/广告资源：只匹配明显广告关键词
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:advert|advertise|advertisement|adlist|adList|adinfo|adInfo|adbanner|adBanner|bannerAd|recommendAd).* reject-dict
+
+# 图片广告资源：仅拦带广告关键词的图片，不拦点餐图片
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:splash|startup|openad|screenad|popup|popbox|advert|adbanner|bannerAd).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[MITM]
+hostname = %APPEND% *.kfc.com.cn, *.kfc.com, *.yumchina.com, *.4008823823.com.cn
