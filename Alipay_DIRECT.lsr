@@ -1,0 +1,43 @@
+# 支付宝全直连规则集
+# 导入为 Loon 远程规则时，请选择策略：DIRECT
+# 建议排序：LAN / CN REGION / 支付宝全直连 / WeChat / Tencent / Alibaba / ChinaMax / AdvertisingLite / 其他规则 / Final
+
+DOMAIN-SUFFIX,alipay.com
+DOMAIN-SUFFIX,alipayobjects.com
+DOMAIN-SUFFIX,alipaydns.com
+DOMAIN-SUFFIX,alipaydev.com
+DOMAIN-SUFFIX,alipay-eco.com
+DOMAIN-SUFFIX,antfin.com
+DOMAIN-SUFFIX,antfortune.com
+DOMAIN-SUFFIX,antgroup.com
+DOMAIN-SUFFIX,antsdaq.com
+DOMAIN-SUFFIX,mybank.cn
+DOMAIN-SUFFIX,mayibank.com
+DOMAIN-SUFFIX,zmxy.com.cn
+DOMAIN-SUFFIX,zhima.com
+
+DOMAIN-SUFFIX,alipayusercontent.com
+DOMAIN-SUFFIX,alipaylog.com
+DOMAIN-SUFFIX,alipay.com.cn
+DOMAIN-SUFFIX,alipay.net
+DOMAIN-SUFFIX,alipay.hk
+DOMAIN-SUFFIX,alipayplus.com
+DOMAIN-SUFFIX,alipayplus.com.cn
+
+DOMAIN-SUFFIX,alicdn.com
+DOMAIN-SUFFIX,aliyuncs.com
+DOMAIN-SUFFIX,aliyun.com
+DOMAIN-SUFFIX,aliapp.org
+DOMAIN-SUFFIX,aliimg.com
+DOMAIN-SUFFIX,alibaba.com
+DOMAIN-SUFFIX,alibabacloud.com
+DOMAIN-SUFFIX,alibabacloud.com.cn
+DOMAIN-SUFFIX,alios.cn
+DOMAIN-SUFFIX,mmstat.com
+
+DOMAIN-SUFFIX,aliyuncaptcha.com
+DOMAIN-SUFFIX,alicaptcha.com
+DOMAIN-SUFFIX,alimei.com
+DOMAIN-SUFFIX,aliyun-inc.com
+
+DOMAIN-SUFFIX,gov.cn
