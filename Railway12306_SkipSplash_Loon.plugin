@@ -1,0 +1,24 @@
+#!name=12306开屏直进主界面
+#!desc=尝试跳过铁路12306开屏等待：清理开屏广告、启动页、弹窗、引导页字段，并把倒计时/展示时长改为0。尽量不拦购票、登录、支付、订单接口。若登录/购票异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-11
+#!loon_version=3.2.0
+
+[Rule]
+# 12306 明显广告/统计域名，轻量拦截
+DOMAIN-SUFFIX,ad.12306.cn,REJECT
+DOMAIN-SUFFIX,ads.12306.cn,REJECT
+
+[URL Rewrite]
+# 明显开屏/启动广告/弹窗接口，直接返回空字典
+^https?:\/\/.*\.12306\.cn\/.*(?:splash|startup|startUp|launch|openad|openAd|screenad|screenAd|advert|advertise|advertisement|adList|adInfo|popup|popUp|popbox|banner|guide|loading).* reject-dict
+
+# 明显广告图片/资源，返回空响应
+^https?:\/\/.*\.12306\.cn\/.*(?:splash|startup|launch|openad|screenad|advert|banner|popup|guide|loading).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+# 只处理疑似开屏/广告/弹窗/引导接口，不处理购票核心接口
+http-response ^https?:\/\/.*\.12306\.cn\/.*(?:splash|startup|startUp|launch|openad|openAd|screenad|screenAd|advert|advertise|advertisement|adList|adInfo|popup|popUp|popbox|banner|guide|loading).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/railway12306_skip_splash.js,tag=12306开屏跳过净化
+
+[MITM]
+hostname = %APPEND% *.12306.cn
