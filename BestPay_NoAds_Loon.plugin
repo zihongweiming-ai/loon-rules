@@ -1,0 +1,22 @@
+#!name=翼支付去广告保守版
+#!desc=翼支付/BestPay App 去广告保守版：处理开屏广告、首页弹窗、Banner、营销推荐位。尽量避开登录、支付、银行卡、充值、转账、账单、权益、实名认证等核心字段。若支付/登录/绑卡异常，请立即关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-13
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/.*(?:bestpay|189\.cn|chinatelecom).*\/.*(?:splash|launch|startup|openad|screenad|advert|advertise|advertisement|adlist|adinfo|banner|popup|popbox|marketing|promotion|campaign|recommendad).* reject-dict
+^https?:\/\/.*(?:bestpay|189\.cn|chinatelecom).*\/.*(?:splash|launch|startup|openad|screenad|advert|banner|popup|marketing|promotion).*\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+http-response ^https?:\/\/.*(?:bestpay|189\.cn|chinatelecom).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/bestpay_noads.js,tag=翼支付广告净化
+
+[MITM]
+hostname = %APPEND% *.bestpay.com.cn, *.bestpay.com, *.189.cn, *.chinatelecom.com.cn
