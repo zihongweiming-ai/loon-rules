@@ -1,0 +1,31 @@
+# 中国移动App全直连规则集
+# 导入为 Loon 远程规则时，请选择策略：DIRECT
+# 建议放在 Advertising / Reject / 国外规则 / Final 之前
+
+DOMAIN-SUFFIX,10086.cn
+DOMAIN-SUFFIX,chinamobile.com
+DOMAIN-SUFFIX,cmcc.com
+DOMAIN-SUFFIX,cmcc.com.cn
+DOMAIN-SUFFIX,cmdc.com.cn
+
+DOMAIN-SUFFIX,cmpassport.com
+DOMAIN-SUFFIX,cmpassport.com.cn
+DOMAIN-SUFFIX,cmicrwx.cn
+DOMAIN-SUFFIX,cmi.chinamobile.com
+
+DOMAIN-SUFFIX,ecloud.10086.cn
+DOMAIN-SUFFIX,cloud.10086.cn
+DOMAIN-SUFFIX,mcloud.10086.cn
+DOMAIN-SUFFIX,hebao.cn
+DOMAIN-SUFFIX,cmpay.com
+DOMAIN-SUFFIX,cmvideo.cn
+DOMAIN-SUFFIX,migu.cn
+DOMAIN-SUFFIX,miguvideo.com
+DOMAIN-SUFFIX,andfx.cn
+DOMAIN-SUFFIX,139.com
+DOMAIN-SUFFIX,139cm.com
+
+DOMAIN-KEYWORD,10086
+DOMAIN-KEYWORD,chinamobile
+DOMAIN-KEYWORD,cmpassport
+DOMAIN-KEYWORD,cmcc
