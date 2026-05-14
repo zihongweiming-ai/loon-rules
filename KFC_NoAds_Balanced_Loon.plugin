@@ -1,0 +1,23 @@
+#!name=肯德基去广告平衡版
+#!desc=肯德基/KFC 中国 App 去广告平衡版：比保守版更有效，但不再全量净化所有 KFC 接口，尽量避免误杀点餐、菜单、支付、优惠券、取餐码。若下单/支付异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-14
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:splash|launch|startup|startUp|openad|openAd|screenad|screenAd|loadingAd|loadingad).* reject-dict
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:popup|popUp|popbox|popBox|popLayer|float|floating|modalAd|windowAd|toastAd).* reject-dict
+^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:advert|advertise|advertisement|adlist|adList|adinfo|adInfo|adbanner|adBanner|bannerAd|recommendAd|operationAd|marketingAd).* reject-dict
+
+[Script]
+http-response ^https?:\/\/.*(?:kfc|yumchina|4008823823).*\/.*(?:home|index|launch|startup|splash|popup|pop|banner|advert|adList|adInfo|marketing|promotion|campaign|activity|operation|recommend).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/kfc_noads_balanced.js,tag=肯德基广告净化平衡版
+
+[MITM]
+hostname = %APPEND% *.kfc.com.cn, *.kfc.com, *.yumchina.com, *.yum.com.cn, *.4008823823.com.cn
