@@ -1,0 +1,14 @@
+#!name=京东快递去广告
+#!desc=基于抓包清理京东快递 App 首页开屏广告、首页 Banner、营销推荐模块；保守版，不拦截核心寄件/查件接口。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/JD.png
+
+[Script]
+http-response ^https:\/\/lop-proxy\.jd\.com\/+queryAppHomePageMarketingRecommendRuleConfigInfo(?:\?.*)?$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js, requires-body=true, timeout=10, tag=京东快递_首页开屏广告
+http-response ^https:\/\/lop-proxy\.jd\.com\/+config\/queryContentListWithPage(?:\?.*)?$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js, requires-body=true, timeout=10, tag=京东快递_首页Banner
+http-response ^https:\/\/lop-proxy\.jd\.com\/+queryCmsContentInfo(?:\?.*)?$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js, requires-body=true, timeout=10, tag=京东快递_营销模块
+http-response ^https:\/\/lop-proxy\.jd\.com\/+queryHomeMainInfo(?:\?.*)?$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js, requires-body=true, timeout=10, tag=京东快递_首页广告兜底
+
+[MITM]
+hostname = lop-proxy.jd.com
