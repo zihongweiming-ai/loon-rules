@@ -1,0 +1,68 @@
+#!name=中国移动去广告 V2
+#!desc=修复换行格式；基于抓包加强拦截：中国移动 App 首页弹窗、toast、浮窗、搜索热词、消息营销、推荐引擎、推送回执和统计上报。若首页空白，请注释“强力首页广告位”部分。
+#!author=ChatGPT
+#!date=2026-05-15
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+
+[URL Rewrite]
+# ===== 基础广告：弹窗 / 浮窗 / toast / 挽留页 =====
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/homepagePopup\/getSortInfo - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/toast\/august\/getPages - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/toast\/august\/getToast - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/toast\/getToastRule - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/detainment\/august\/getPages - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DA\/liveSuspension\/getPageCode - reject-200
+
+# ===== 首页皮肤 / 搜索热词 / 营销消息 =====
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/homeSkin\/getHomeSkin - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/searchWord\/getSearchWordInfo - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/message_query\/index\/getLatestPushMsg - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/UN\/message\/pushMessage - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/msg\/ph\/config\/select - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/msg\/ph\/config\/selectConfig - reject-200
+
+# ===== 强力首页广告位：如果首页空白，就先注释这 4 条 =====
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/homePage\/getTopAreaList - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/multipleInterfaces\/aggregationData - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/init\/getNavigation - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/hotupdate\/getHotupdateList - reject-200
+
+# ===== 缓存 / 行为上报 =====
+^https?:\/\/client\.app\.coc\.10086\.cn\/cache_server\/api\/cache\/encrypt\/reportV2 - reject-200
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/dataReport\/getSwitchSetupInformation - reject-200
+^https?:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DN\/dataSeries\/logReport - reject-200
+^https?:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DN\/exceptionOrTake\/reportInfo - reject-200
+^https?:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DH\/footmark\/openPro - reject-200
+
+# ===== 个性化推荐引擎 =====
+^https?:\/\/h\.app\.coc\.10086\.cn(?::443)?\/ngpsie\/psieappaiddsdkserver\/.* - reject-200
+^https?:\/\/h\.app\.coc\.10086\.cn(?::443)?\/ngpsie\/psieappaidcsdkserver\/dataReported\/.* - reject-200
+^https?:\/\/h\.app\.coc\.10086\.cn(?::443)?\/ngpsie\/psieappaijssdk\/engine\/.* - reject-200
+^https?:\/\/h\.app\.coc\.10086\.cn(?::443)?\/ngpsie\/psieipuudp\/gather\/newSendLogForAES - reject-200
+
+# ===== 极光 / 推送 / 统计 =====
+^https?:\/\/jiguang\.coc\.10086\.cn\/v3\/projects\/[^\/]+\/collect.* - reject-200
+^https?:\/\/jiguang\.coc\.10086\.cn\/v3\/projects\/[^\/]+\/query.* - reject-200
+^https?:\/\/push\.it\.10086\.cn\/(contact|mc)\/receipt\/.* - reject-200
+^https?:\/\/da\.mmarket\.com\/udata_v5\/appsdk\/postsyslog - reject-200
+^https?:\/\/dualstack-logs\.amap\.com\/ws\/log\/upload.* - reject-200
+^https?:\/\/dnlog\.cmpassport\.com:9443\/log\/logReport - reject-200
+^https?:\/\/log1\.cmpassport\.com:9443\/log\/logReport - reject-200
+
+# ===== ShareSDK / MobTech 统计 =====
+^https?:\/\/cfgc\.zztfly\.com\/(nndm|v6\/gcf).* - reject-200
+^https?:\/\/upc\.zztfly\.com\/v5\/gcl - reject-200
+^https?:\/\/upc\.zztfly\.com\/privacy\/policy\/authorization\/status.* - reject-200
+
+[Rule]
+# 无需 MITM 的域名级统计拦截
+DOMAIN,dualstack-logs.amap.com,REJECT
+DOMAIN,da.mmarket.com,REJECT
+DOMAIN,jiguang.coc.10086.cn,REJECT
+DOMAIN,upc.zztfly.com,REJECT
+DOMAIN,cfgc.zztfly.com,REJECT
+DOMAIN,dnlog.cmpassport.com,REJECT
+DOMAIN,log1.cmpassport.com,REJECT
+
+[MITM]
+hostname = client.app.coc.10086.cn, apm.app.coc.10086.cn, h.app.coc.10086.cn, jiguang.coc.10086.cn, push.it.10086.cn, da.mmarket.com, dualstack-logs.amap.com, dnlog.cmpassport.com, log1.cmpassport.com, cfgc.zztfly.com, upc.zztfly.com
