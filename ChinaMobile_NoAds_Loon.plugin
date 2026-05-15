@@ -1,0 +1,23 @@
+#!name=中国移动App去广告保守版
+#!desc=中国移动/10086 App 去广告：只处理明显开屏、弹窗、Banner、营销推荐位。尽量避开登录、充值、账单、套餐、流量包、实名认证等核心功能。若登录/充值/查询异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-15
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/.*(?:10086|chinamobile|cmcc).*\/.*(?:splash|launch|startup|openad|screenad|loadingad).* reject-dict
+^https?:\/\/.*(?:10086|chinamobile|cmcc).*\/.*(?:popup|popUp|popbox|popBox|popLayer|float|floating|modalAd|windowAd|toastAd).* reject-dict
+^https?:\/\/.*(?:10086|chinamobile|cmcc).*\/.*(?:advert|advertise|advertisement|adlist|adList|adinfo|adInfo|adbanner|adBanner|bannerAd|recommendAd|operationAd|marketingAd).* reject-dict
+
+[Script]
+http-response ^https?:\/\/.*(?:10086|chinamobile|cmcc).*\/.*(?:home|index|launch|startup|splash|popup|pop|banner|advert|adList|adInfo|marketing|promotion|campaign|activity|operation|recommend).* requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/chinamobile_noads.js,tag=中国移动广告净化
+
+[MITM]
+hostname = %APPEND% *.10086.cn, *.chinamobile.com, *.cmcc.com, *.cmcc.com.cn
