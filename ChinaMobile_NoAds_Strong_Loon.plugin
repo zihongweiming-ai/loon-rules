@@ -1,0 +1,27 @@
+#!name=中国移动App去广告增强版
+#!desc=中国移动/10086 App 去广告增强版：扩大命中首页资源、运营位、开屏、弹窗、悬浮窗、Banner、推荐位。仍尽量避开登录、充值、账单、套餐、流量包等核心业务。若核心功能异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-15
+#!loon_version=3.2.0
+
+[Rule]
+DOMAIN-SUFFIX,admaster.com.cn,REJECT
+DOMAIN-SUFFIX,miaozhen.com,REJECT
+DOMAIN-SUFFIX,talkingdata.com,REJECT
+DOMAIN-SUFFIX,umeng.com,REJECT
+DOMAIN-SUFFIX,umengcloud.com,REJECT
+DOMAIN-SUFFIX,mmstat.com,REJECT
+
+[URL Rewrite]
+# 明显开屏、启动、弹窗、悬浮窗、广告位接口
+^https?:\/\/.*(?:10086|chinamobile|cmcc|cmpassport|migu).*\/(?:.*)(?:splash|launch|startup|openad|screenad|loadingad|advert|advertise|advertisement|adlist|adinfo|popup|popbox|poplayer|float|floating|bannerad|adbanner|recommendad|operationad|marketingad)(?:.*) reject-dict
+
+# 明显广告图片/资源
+^https?:\/\/.*(?:10086|chinamobile|cmcc|cmpassport|migu).*\/(?:.*)(?:splash|startup|openad|screenad|advert|popup|popbox|bannerad|adbanner|marketingad)(?:.*)\.(?:jpg|jpeg|png|webp|gif)$ reject-200
+
+[Script]
+# 增强版：只处理疑似首页、资源配置、运营活动、广告弹窗接口
+http-response ^https?:\/\/.*(?:10086|chinamobile|cmcc|cmpassport|migu).*\/(?:.*)(?:home|index|main|page|resource|config|portal|launch|startup|splash|popup|pop|banner|advert|adList|adInfo|marketing|promotion|campaign|activity|operation|recommend|float|window|guide)(?:.*) requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/chinamobile_noads_strong.js,tag=中国移动广告净化增强版
+
+[MITM]
+hostname = %APPEND% *.10086.cn, *.chinamobile.com, *.cmcc.com, *.cmcc.com.cn, *.cmpassport.com, *.cmpassport.com.cn, *.migu.cn, *.miguvideo.com
