@@ -1,0 +1,39 @@
+#!name=途虎养车去广告-抓包精准版
+#!desc=基于你提供的途虎抓包制作：处理开屏广告、启动页营销、首页通栏/轮播广告、底部券提醒、未读红点、弹窗营销、部分埋点。保留商品图片、商品列表、门店、预约、下单、支付等核心功能。若异常，请关闭本插件。
+#!author=ChatGPT
+#!date=2026-05-16
+#!loon_version=3.2.0
+
+[Rule]
+# 途虎埋点/监控，减少无用请求
+DOMAIN,ta.tuhu.cn,REJECT
+DOMAIN,analytics.tuhu.com,REJECT
+DOMAIN,lighthouse.tuhu.cn,REJECT
+DOMAIN,prism.tuhu.cn,REJECT
+DOMAIN,analytics.oceanengine.com,REJECT
+
+[URL Rewrite]
+# 开屏广告/启动页营销
+^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/queryScheme reject-dict
+^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/scheme\/check reject-dict
+^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-advertisement-service\/ext\/advertisement\/see\/openapp reject-dict
+
+# 推送角标/消息红点
+^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-push-message-box\/api\/getIndexNotReadNum reject-dict
+
+[Script]
+# 首页、Tab、配置类接口净化：去首页通栏、底部券条、红点、开屏数据；保留商品图和商品卡片
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-homepage-service\/homePage\/getHomePageInfo requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎首页广告净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-homepage-service\/tabBarService\/getNewTabBars requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎底部Tab红点净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-modular-config\/moduleConfig\/getModuleConfigList requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎模块广告净化
+http-response ^https?:\/\/cl-gateway\.tuhu\.cn\/cl-app-config-query\/query\/getConfiguration requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎配置广告净化
+
+# 兜底处理：如果 URL Rewrite 返回结构不兼容，可由脚本返回安全空结构
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/queryScheme requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎开屏营销净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/scheme\/check requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎营销校验净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-advertisement-service\/ext\/advertisement\/see\/openapp requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎开屏广告净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-push-message-box\/api\/getIndexNotReadNum requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎未读红点净化
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-usually-api\/popup\/getRetainPopupInfo requires-body=true,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture.js,tag=途虎挽留弹窗净化
+
+[MITM]
+hostname = %APPEND% gateway.tuhu.cn, cl-gateway.tuhu.cn, ta.tuhu.cn, analytics.tuhu.com, lighthouse.tuhu.cn, prism.tuhu.cn, analytics.oceanengine.com
