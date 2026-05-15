@@ -1,0 +1,46 @@
+#!name=大麦去广告 V1
+#!desc=基于本次抓包制作：拦截大麦/淘票票横幅素材、阿里系广告与埋点上报；保留登录、抢票、下单、支付相关域名直连。若首页内容异常，优先注释“强力首页推荐/弹窗”组。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!date=2026-05-16
+
+[Rewrite]
+# ===== 抓包命中的淘票票/大麦联动横幅广告素材 =====
+^https?:\/\/assets\.taopiaopiao\.com\/chaoniu\/pictures\/.*\.(png|jpg|jpeg|webp|gif)(\?.*)?$ - reject-img
+
+# ===== 大麦 MTop 广告 / 开屏 / 弹窗 / 浮层 / Banner：若登录、抢票、首页异常，先注释本组 =====
+^https?:\/\/(acs|guide-acs)\.m\.taobao\.com\/gw\/.*(mtop\.)?.*(damai|dm|mtop).*?(ad|ads|advert|advertise|splash|popup|poplayer|banner|float|floating|marketing|alimama|adzone).* - reject-dict
+^https?:\/\/(acs|guide-acs)\.m\.taobao\.com\/gw\/.*(ad|ads|advert|advertise|splash|popup|poplayer|banner|float|floating|marketing|alimama|adzone).*?(damai|dm|mtop).* - reject-dict
+
+# ===== 强力首页推荐 / 信息流广告：如果首页空白或推荐页异常，注释本组 =====
+^https?:\/\/(acs|guide-acs)\.m\.taobao\.com\/gw\/.*(damai|dm).*?(feed|feeds|recommend|recommendation|recmd).*?(ad|ads|advert|banner|marketing).* - reject-dict
+^https?:\/\/(acs|guide-acs)\.m\.taobao\.com\/gw\/.*(mamasearchad|alimama|adzone|adtrack|adservice).* - reject-dict
+
+# ===== 阿里系埋点日志：不影响买票可保留；若 App 启动异常可注释 =====
+^https?:\/\/h-adashx\.ut\.hzshudian\.com\/upload.* - reject-200
+^https?:\/\/(adashx|h-adashx)\.ut\..*\/upload.* - reject-200
+
+[Rule]
+# ===== 广告 / 营销素材域名 =====
+DOMAIN-SUFFIX,mamasearchad.cloudvideocdn.taobao.com,REJECT
+DOMAIN-SUFFIX,alimama.cloudvideocdn.taobao.com,REJECT
+DOMAIN-SUFFIX,adashx.ut.taobao.com,REJECT
+DOMAIN-SUFFIX,h-adashx.ut.hzshudian.com,REJECT
+DOMAIN,h-adashx.ut.hzshudian.com,REJECT
+
+# ===== 只做广告/埋点，不动大麦核心购票链路 =====
+DOMAIN,assets.taopiaopiao.com,PROXY
+
+# ===== 这些是登录 / 支付 / 交易 / 安全相关，强制直连，避免证书或下单异常 =====
+DOMAIN,mobilegw.alipay.com,DIRECT
+DOMAIN-SUFFIX,alipay.com,DIRECT
+DOMAIN,trade-acs.m.taobao.com,DIRECT
+DOMAIN,unshacs.m.taobao.com,DIRECT
+DOMAIN,atoken.m.taobao.com,DIRECT
+DOMAIN-SUFFIX,passport.damai.cn,DIRECT
+DOMAIN-SUFFIX,login.taobao.com,DIRECT
+DOMAIN-SUFFIX,alibaba.com,DIRECT
+
+[MITM]
+# 只解密广告/普通 MTop 域名，不解密 trade-acs / alipay / atoken / unshacs
+hostname = %APPEND% assets.taopiaopiao.com, acs.m.taobao.com, guide-acs.m.taobao.com, h-adashx.ut.hzshudian.com
