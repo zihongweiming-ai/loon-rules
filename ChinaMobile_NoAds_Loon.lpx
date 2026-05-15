@@ -1,0 +1,47 @@
+#!name=中国移动去广告
+#!desc=基于抓包整理：中国移动 App 12.1.0，拦截首页弹窗、toast、悬浮推广、挽留页、搜索热词、营销推送和部分统计上报。若出现首页缺模块，可先注释“首页皮肤/搜索热词/推送消息”三条。
+#!author=ChatGPT
+#!date=2026-05-15
+#!homepage=https://10086.cn
+
+[URL Rewrite]
+# ===== 中国移动 App：弹窗 / 浮窗 / 首页推广 =====
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/homepagePopup\/getSortInfo - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/toast\/august\/getPages - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/toast\/august\/getToast - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/toast\/getToastRule - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/detainment\/august\/getPages - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DA\/liveSuspension\/getPageCode - reject-200
+
+# ===== 首页皮肤 / 搜索热词 / 营销推送，通常是运营位；如误伤可注释下面三条 =====
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/homeSkin\/getHomeSkin - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/searchWord\/getSearchWordInfo - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DH\/message_query\/index\/getLatestPushMsg - reject-200
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/UN\/message\/pushMessage - reject-200
+
+# ===== 中国移动 App：缓存/行为上报 =====
+^https:\/\/client\.app\.coc\.10086\.cn\/cache_server\/api\/cache\/encrypt\/reportV2 - reject-200
+^https:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DN\/dataSeries\/logReport - reject-200
+^https:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DN\/exceptionOrTake\/reportInfo - reject-200
+^https:\/\/apm\.app\.coc\.10086\.cn\/biz-orange\/DH\/footmark\/openPro - reject-200
+
+# ===== 极光 / 移动市场 / 高德 / 一键登录日志：统计上报 =====
+^https:\/\/jiguang\.coc\.10086\.cn\/v3\/projects\/[^\/]+\/collect - reject-200
+^https:\/\/jiguang\.coc\.10086\.cn\/v3\/projects\/[^\/]+\/query - reject-200
+^https:\/\/da\.mmarket\.com\/udata_v5\/appsdk\/postsyslog - reject-200
+^https:\/\/dualstack-logs\.amap\.com\/ws\/log\/upload - reject-200
+^https:\/\/dnlog\.cmpassport\.com:9443\/log\/logReport - reject-200
+^https:\/\/log1\.cmpassport\.com:9443\/log\/logReport - reject-200
+
+# ===== ShareSDK/MobTech 统计：不影响主功能；如分享功能异常，注释下面两条 =====
+^https:\/\/upc\.zztfly\.com\/v5\/gcl - reject-200
+^https:\/\/upc\.zztfly\.com\/privacy\/policy\/authorization\/status - reject-200
+
+# ===== 个性化推荐引擎：更强去推荐，若首页推荐卡片异常可注释这一组 =====
+^https:\/\/h\.app\.coc\.10086\.cn\/ngpsie\/psieappaiddsdkserver\/(merger|getFeature|feature)\/.* - reject-200
+^https:\/\/h\.app\.coc\.10086\.cn\/ngpsie\/psieappaidcsdkserver\/dataReported\/.* - reject-200
+^https:\/\/h\.app\.coc\.10086\.cn\/ngpsie\/psieappaijssdk\/engine\/.* - reject-200
+^https:\/\/h\.app\.coc\.10086\.cn:443\/ngpsie\/psieipuudp\/gather\/newSendLogForAES - reject-200
+
+[MITM]
+hostname = client.app.coc.10086.cn, apm.app.coc.10086.cn, jiguang.coc.10086.cn, da.mmarket.com, dualstack-logs.amap.com, dnlog.cmpassport.com, log1.cmpassport.com, upc.zztfly.com, h.app.coc.10086.cn
