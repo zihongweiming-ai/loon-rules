@@ -1,0 +1,11 @@
+#!name=翼支付去广告
+#!desc=依据抓包生成：清空翼支付开屏/权益弹窗广告接口，保留接口成功结构，尽量避免误杀核心功能。
+#!author=ChatGPT
+#!date=2026-05-15
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+
+[Script]
+http-response ^https:\/\/mapi-app\.bestpay\.com\.cn\/gapi\/appClient\/noEnc\/unionOpenAds(?:\?.*)?$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/YiPay_NoAds.js, requires-body=true, timeout=10, tag=翼支付_开屏权益广告
+
+[MITM]
+hostname = mapi-app.bestpay.com.cn
