@@ -1,0 +1,36 @@
+#!name=途虎养车去广告-抓包精准V2
+#!desc=修复上一版没生效的问题：使用 Loon 的 max-size=0 处理大响应体，并按抓包精确处理开屏广告、启动页营销、首页通栏轮播、底部券条、Tab红点、消息角标。保留商品图片、商品列表、门店、预约、下单、支付。
+#!author=ChatGPT
+#!date=2026-05-16
+#!loon_version=3.2.0
+
+[Rule]
+# 途虎埋点/监控，减少无用请求
+DOMAIN,ta.tuhu.cn,REJECT
+DOMAIN,analytics.tuhu.com,REJECT
+DOMAIN,lighthouse.tuhu.cn,REJECT
+DOMAIN,prism.tuhu.cn,REJECT
+DOMAIN,analytics.oceanengine.com,REJECT
+
+[URL Rewrite]
+# 抓包里的开屏大图，避免脚本未及时生效时仍加载开屏图片；只拦 img1.tuhu.org/JPG 下的超高启动图，不拦 ProductImages 商品图
+^https?:\/\/img1\.tuhu\.org\/JPG\/.*_h(?:1[2-9][0-9]{2}|2[0-9]{3})\.(?:png|jpg|jpeg|webp).* reject-200
+
+[Script]
+# 开屏广告/启动页营销
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/queryScheme requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎开屏营销净化V2
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-scene-marketing-service\/api\/scene\/scheme\/check requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎营销校验净化V2
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-advertisement-service\/ext\/advertisement\/see\/openapp requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎开屏广告净化V2
+
+# 首页/底部 Tab/模块配置，响应较大，必须 max-size=0
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-homepage-service\/homePage\/getHomePageInfo requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎首页广告净化V2
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-homepage-service\/tabBarService\/getNewTabBars requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎Tab红点净化V2
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-modular-config\/moduleConfig\/getModuleConfigList requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎模块广告净化V2
+http-response ^https?:\/\/cl-gateway\.tuhu\.cn\/cl-app-config-query\/query\/getConfiguration requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎配置广告净化V2
+
+# 角标/挽留弹窗
+http-response ^https?:\/\/gateway\.tuhu\.cn\/mkt\/mkt-push-message-box\/api\/getIndexNotReadNum requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎消息角标净化V2
+http-response ^https?:\/\/gateway\.tuhu\.cn\/cl\/cl-usually-api\/popup\/getRetainPopupInfo requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/tuhu_noads_capture_v2.js,tag=途虎挽留弹窗净化V2
+
+[MITM]
+hostname = %APPEND% gateway.tuhu.cn, cl-gateway.tuhu.cn, img1.tuhu.org, ta.tuhu.cn, analytics.tuhu.com, lighthouse.tuhu.cn, prism.tuhu.cn, analytics.oceanengine.com
