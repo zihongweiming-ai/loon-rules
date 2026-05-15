@@ -1,0 +1,58 @@
+#!name=肯德基去广告
+#!desc=基于抓包 296_1778888715388 生成：拦截肯德基 App 开屏、首页弹窗、首页信息流、固定推荐位、广告素材与埋点上报。未 MITM 登录、下单、支付、优惠券核心域名。
+#!author=ChatGPT
+#!date=2026-05-16
+
+[Rewrite]
+# > 肯德基开屏/启动广告
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/homePage\/v3\/personalAd - reject-dict
+
+# > 首页弹窗/浮层
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app6\/pop - reject-dict
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app5\/homepage\/ai\/popup - reject-dict
+^https?:\/\/res\.kfc\.com\.cn\/CRM\/kfcad\/pop\/pop_[^\/]*\.json - reject-dict
+
+# > 首页信息流/固定推荐广告
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/ai\/v2\/homepage\/feeds - reject-dict
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/ai\/v2\/fixed\/feeds-fixed - reject-dict
+^https?:\/\/res\.kfc\.com\.cn\/CRM\/kfcad\/apphome5\/feeds_[^\/]*\.json - reject-dict
+^https?:\/\/res\.kfc\.com\.cn\/CRM\/kfcad\/apphome5\/flow\/flow_[^\/]*\.json - reject-dict
+
+# > 广告素材图片/静态资源
+^https?:\/\/sares\.kfc\.com\.cn\/uatfile\/ad\/.*\.(?:jpg|jpeg|png|webp|gif)(?:\?.*)?$ - reject-img
+
+# > A/B 广告路由
+^https?:\/\/abplatform\.yumchina\.com\/abtestplatform\/api\/abtest\/kfc\/adRouter - reject-dict
+
+# > 埋点/日志上报
+^https?:\/\/adttrackingprd\.hwwt8\.com\/track_app - reject-200
+^https?:\/\/trackingprd\.hwwt8\.com(?::443)?\/g\/d - reject-200
+^https?:\/\/bs2\.yumchina\.com\/logan\/3\.0\/upload - reject-200
+^https?:\/\/videocloud\.cn-hangzhou\.dualstack\.log\.aliyuncs\.com\/.* - reject-200
+^https?:\/\/vod-newplayer\.cn-hangzhou\.log\.aliyuncs\.com\/.* - reject-200
+^https?:\/\/alivc-aio\.cn-hangzhou\.dualstack\.log\.aliyuncs\.com\/.* - reject-200
+
+# > 可选强力规则：如果首页仍有大量营销卡片，可去掉下面规则前面的 #。
+# 注意：可能隐藏首页宫格/优惠券入口，不建议抢券、点餐前开启。
+# ^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app\/ad - reject-dict
+# ^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app6\/newgrid - reject-dict
+# ^https?:\/\/res\.kfc\.com\.cn\/CRM\/kfcad\/apphome6\/apphome_[^\/]*\.json - reject-dict
+
+[Rule]
+# > 登录/认证/下单/支付相关域名强制直连，避免证书错误或下单异常
+DOMAIN,applogin.kfcapp.cn,DIRECT
+DOMAIN,appgologin.189.cn,DIRECT
+DOMAIN-SUFFIX,189.cn,DIRECT
+DOMAIN-SUFFIX,cmpassport.com,DIRECT
+DOMAIN-SUFFIX,kfcapp.cn,DIRECT
+DOMAIN,apporder.kfc.com.cn,DIRECT
+DOMAIN,appcoupon.kfc.com.cn,DIRECT
+DOMAIN,appcommon.kfc.com.cn,DIRECT
+DOMAIN,appprime.kfc.com.cn,DIRECT
+DOMAIN,appdelivery.kfc.com.cn,DIRECT
+DOMAIN,order.kfc.com.cn,DIRECT
+DOMAIN,orders.kfc.com.cn,DIRECT
+DOMAIN,aliorders.kfc.com.cn,DIRECT
+
+[MITM]
+hostname = %APPEND% dynamicad.kfc.com.cn, res.kfc.com.cn, sares.kfc.com.cn, adttrackingprd.hwwt8.com, trackingprd.hwwt8.com, bs2.yumchina.com, abplatform.yumchina.com, videocloud.cn-hangzhou.dualstack.log.aliyuncs.com, vod-newplayer.cn-hangzhou.log.aliyuncs.com, alivc-aio.cn-hangzhou.dualstack.log.aliyuncs.com
