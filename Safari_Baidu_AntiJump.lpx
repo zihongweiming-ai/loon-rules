@@ -1,0 +1,43 @@
+#!name=Safari 百度防跳转
+#!desc=拦截 Safari 访问百度网页时的 App 唤醒、openapp、baiduboxapp、跳转链。需要开启 MITM 并信任 Loon 证书。
+#!author=ChatGPT
+#!homepage=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/Safari_Baidu_AntiJump.lpx
+
+[Rule]
+DOMAIN,boxer.baidu.com,REJECT
+DOMAIN,als.baidu.com,REJECT
+DOMAIN,ext.baidu.com,REJECT
+DOMAIN,afd.baidu.com,REJECT
+DOMAIN,ada.baidu.com,REJECT
+DOMAIN,afdconf.baidu.com,REJECT
+DOMAIN,newclient.map.baidu.com,REJECT
+
+[Url Rewrite]
+
+百度 App 唤醒 / openapp / baiduboxapp
+
+^https?://boxer.baidu.com/.* - reject
+^https?://als.baidu.com/.* - reject
+^https?://ext.baidu.com/.* - reject
+^https?://afd.baidu.com/.* - reject
+^https?://ada.baidu.com/.* - reject
+^https?://afdconf.baidu.com/.* - reject
+
+百度搜索页、资讯页、移动页里的 App 唤醒参数
+
+^https?://(m|www).baidu.com/.(baiduboxapp|baiduboxlite|openapp|appjump|invoke|scheme|wakeup|boxapp). - reject-dict
+^https?://mbd.baidu.com/.(baiduboxapp|baiduboxlite|openapp|appjump|invoke|scheme|wakeup|boxapp). - reject-dict
+
+百度贴吧 / 文库 / 网盘网页唤醒 App
+
+^https?://tieba.baidu.com/.(baiduboxapp|openapp|appjump|invoke|scheme|wakeup). - reject
+^https?://wk.baidu.com/.(baiduboxapp|openapp|appjump|invoke|scheme|wakeup). - reject
+^https?://pan.baidu.com/.(baiduboxapp|openapp|appjump|invoke|scheme|wakeup). - reject
+
+百度地图部分交叉推广
+
+^https?://newclient.map.baidu.com/client/crossmarketing.* - reject
+^https?://newclient.map.baidu.com/client/usersystem/home/dynamic.* - reject
+
+[MITM]
+hostname = m.baidu.com, www.baidu.com, mbd.baidu.com, boxer.baidu.com, als.baidu.com, ext.baidu.com, afd.baidu.com, ada.baidu.com, afdconf.baidu.com, tieba.baidu.com, wk.baidu.com, pan.baidu.com, newclient.map.baidu.com
