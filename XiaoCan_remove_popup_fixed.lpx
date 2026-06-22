@@ -1,0 +1,10 @@
+#!name=小蚕霸王餐去弹窗
+#!desc=去除小蚕霸王餐首页运营弹窗、会员弹窗、券包弹窗、广告位弹窗；保留订单/抢餐接口。
+#!author=ChatGPT
+#!date=2026-06-22
+
+[Script]
+http-response ^https:\/\/gw\.xiaocantech\.com\/rpc script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/XiaoCan_remove_popup.js, requires-body=true, timeout=10, tag=小蚕霸王餐_去弹窗
+
+[Mitm]
+hostname = gw.xiaocantech.com
