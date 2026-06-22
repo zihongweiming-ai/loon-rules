@@ -1,0 +1,17 @@
+#!name=小蚕去弹窗
+#!desc=根据 2026-06-22 新抓包制作：去除小蚕霸王餐、会员营销、首页营销弹窗/悬浮窗/广告位，尽量保留订单与点餐功能。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+
+[Script]
+http-response ^https:\/\/gw\.xiaocantech\.com\/rpc$ script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/XiaoCan_Popup_Clean.js, requires-body=true, timeout=10, tag=小蚕-去弹窗
+http-response ^https:\/\/web2\.realtech-inc\.com\/oss\/xc-app-assets\/configs\/.*\.json.* script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/XiaoCan_Popup_Clean.js, requires-body=true, timeout=10, tag=小蚕-配置净化
+http-response ^https:\/\/web\.xinyifm\.cn\/oss\/xc-app-assets\/.*\.json.* script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/XiaoCan_Popup_Clean.js, requires-body=true, timeout=10, tag=小蚕-配置净化
+
+[Rewrite]
+^https:\/\/c\.tobidad\.cn\/ url reject-dict
+^https:\/\/sensorsdata\.xiaocanapp\.com\/sa url reject
+^https:\/\/api-adservices\.apple\.com\/ url reject-dict
+
+[MITM]
+hostname = %APPEND% gw.xiaocantech.com, web2.realtech-inc.com, web.xinyifm.cn, c.tobidad.cn, sensorsdata.xiaocanapp.com, api-adservices.apple.com
