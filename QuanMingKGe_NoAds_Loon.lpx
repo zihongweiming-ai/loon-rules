@@ -1,0 +1,33 @@
+#!name=全民K歌去广告
+#!desc=基于抓包整理：屏蔽全民K歌广告配置、广告拉取、拉活任务、广告上报与部分统计上报。未包含任何 Cookie / Token / UID。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!date=2026-07-05
+
+[URL Rewrite]
+# ===== 全民K歌 / 腾讯音乐广告 SDK 配置 =====
+^https?:\/\/ad\.tencentmusic\.com\/sdk\/config - reject-200
+^https?:\/\/ad\.tencentmusic\.com\/config\/uni - reject-200
+^https?:\/\/ad\.tencentmusic\.com\/sdk\/ad\/strategies - reject-200
+
+# ===== 广告拉取：开屏 / 信息流 / Banner 等 =====
+^https?:\/\/tmeadkg\.y\.qq\.com\/maproxy\/getAd - reject-dict
+^https?:\/\/tmeadkg\.y\.qq\.com\/maproxy\/getPbCompressAd - reject-200
+^https?:\/\/tmeadkg\.y\.qq\.com\/madownload\/GetUserPullActiveTask - reject-dict
+
+# ===== 广告曝光、点击、下载、转化上报 =====
+^https?:\/\/tmeadkg\.y\.qq\.com\/mareportbatch\/reportPb - reject-200
+^https?:\/\/tmeadkg\.y\.qq\.com\/mareportbatch\/reportBatchPb - reject-200
+^https?:\/\/sdkreport\.e\.qq\.com\/link_event - reject-200
+^https?:\/\/szmg\.qq\.com\/cgi-bin\/log_data\.fcg - reject-200
+^https?:\/\/szmg\.qq\.com\/heartbeat - reject-200
+
+# ===== 全民K歌 / 腾讯音乐统计上报，保守拦截 =====
+^https?:\/\/report\.kg\.qq\.com\/report - reject-200
+^https?:\/\/report\.tencentmusic\.com\/api\/v1\/(crash|perf) - reject-200
+^https?:\/\/publiclog\.zhiyan\.tencent-cloud\.net\/collect - reject-200
+^https?:\/\/ship\.tencentmusic\.com\/api\/v1\/wdr - reject-200
+^https?:\/\/node\.kg\.qq\.com\/log - reject-200
+
+[MITM]
+hostname = ad.tencentmusic.com,tmeadkg.y.qq.com,sdkreport.e.qq.com,szmg.qq.com,report.kg.qq.com,report.tencentmusic.com,publiclog.zhiyan.tencent-cloud.net,ship.tencentmusic.com,node.kg.qq.com
