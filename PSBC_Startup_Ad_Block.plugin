@@ -1,0 +1,8 @@
+#!name=邮储银行启动广告拦截
+#!desc=基于抓包拦截邮储银行 App 启动广告图片接口；不包含剪映接口。
+#!author=汤汤
+#!version=1.0.0
+#!date=2026-07-16
+
+[Rule]
+URL-REGEX,^https?:\/\/login-service\.mobile-bank\.psbc\.com\/sn02\/api\/public\/v1\/getstartupadvpicture\/t020078(?:\?.*)?$,REJECT
