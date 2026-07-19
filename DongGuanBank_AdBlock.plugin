@@ -1,0 +1,19 @@
+#!name=东莞银行去广告
+#!desc=拦截东莞银行 App 当前抓包中识别到的首页广告素材；采用精确路径匹配，尽量避免影响银行业务功能。
+#!author=汤汤
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Bank.png
+
+[Rule]
+# 消费贷“夏日好礼”横幅
+URL-REGEX,^https?:\/\/fl\.dongguanbank\.cn\/inmanagemenubucket\/20260513\/2054361426985881600\.png(?:\?.*)?$,REJECT
+
+# “幸运来敲门·演唱会/CBA门票”横幅
+URL-REGEX,^https?:\/\/fl\.dongguanbank\.cn\/inmanagemenubucket\/20230927\/1706974308280176640\.png(?:\?.*)?$,REJECT
+
+# “首绑3重礼”横幅
+URL-REGEX,^https?:\/\/fl\.dongguanbank\.cn\/inmanagemenubucket\/20251230\/2005933976304357376\.jpg(?:\?.*)?$,REJECT
+
+# 屏蔽非必要埋点与日志上传（不拦截业务接口）
+URL-REGEX,^https?:\/\/qdyy\.dongguanbank\.cn:8006\/sa(?:\?.*)?$,REJECT
+URL-REGEX,^https?:\/\/mas\.dongguanbank\.cn\/loggw\/logUpload\.do(?:\?.*)?$,REJECT
