@@ -1,0 +1,19 @@
+#!name=浅印广告拦截
+#!desc=根据 2026-07-25 抓包制作：拦截美团 DSP 广告展示、InnoAds 曝光追踪及本次捕获的广告素材。采用保守规则，避免屏蔽整个美团素材 CDN。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png
+
+[Rule]
+# 美团 DSP 广告展示/跳转
+DOMAIN,impdsp.meituan.com,REJECT
+
+# InnoAds 广告曝光追踪
+DOMAIN,track2.innoads.cn,REJECT
+
+[URL Rewrite]
+# 本次抓包中的竖屏广告素材（仅拦截精确路径，避免误伤正常资源）
+^https:\/\/s3plus\.meituan\.net\/v1\/mss_5017c592a8a946d2a54eb62a76ba299c\/nebulafile\/7a108d65bd418388d7cdd18459825bba$ reject
+
+[MITM]
+hostname = %APPEND% s3plus.meituan.net
