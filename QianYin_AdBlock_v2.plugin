@@ -1,0 +1,16 @@
+#!name=浅印去广告 v2
+#!desc=拦截浅印抓包中发现的美团DSP广告、InnoAds曝光追踪及广告素材目录；使用空响应/透明图，避免应用反复重试。
+#!author=ChatGPT
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png
+
+[URL Rewrite]
+# 广告点击与展示上报：返回空白 200，避免断连后重试
+^https?:\/\/impdsp\.meituan\.com\/show(?:\?|$) reject-200
+^https?:\/\/track2\.innoads\.cn\/dit\/(?:impression|click)(?:\?|$) reject-200
+
+# 广告图片素材：返回 1 像素透明图
+^https?:\/\/s3plus\.meituan\.net\/v1\/mss_5017c592a8a946d2a54eb62a76ba299c\/nebulafile\/ reject_img
+
+[MITM]
+hostname = %APPEND% impdsp.meituan.com, track2.innoads.cn, s3plus.meituan.net
