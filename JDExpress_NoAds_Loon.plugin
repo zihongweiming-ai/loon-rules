@@ -1,41 +1,12 @@
-#!name=京东快递去广告
-#!desc=专门针对京东快递/京东物流相关页面的轻量去广告。拦截京东广告平台域名、开屏广告与部分物流页弹窗/推荐。若登录、查件、寄件异常，请先关闭本插件。
+#!name=京东快递去广告（抓包精确版）
+#!desc=基于京东快递 iOS 1.8.2 抓包精确清理开屏、首页 Feed、首页推荐卡和弹窗；保留寄件、查件、优惠券、会员、签到等功能。
 #!author=ChatGPT
-#!date=2026-05-11
+#!date=2026-08-22
+#!homepage=https://github.com/zihongweiming-ai/loon-rules
 #!loon_version=3.2.0
 
-[Rule]
-# 京东广告平台/联盟广告
-DOMAIN,dsp-x.jd.com,REJECT
-DOMAIN,bdsp-x.jd.com,REJECT
-DOMAIN,ads-union.jd.com,REJECT
-DOMAIN-SUFFIX,ads.union.jd.com,REJECT
-DOMAIN,du.jd.com,REJECT
-DOMAIN,u-x.jd.com,REJECT
-DOMAIN,img-x.jd.com,REJECT
-DOMAIN-SUFFIX,360yield.com,REJECT
-
-# 京东金融/京东系常见广告接口
-DOMAIN,ms.jr.jd.com,REJECT
-DOMAIN,mapi.m.jd.com,REJECT
-
-[URL Rewrite]
-# 京东/京东快递开屏广告、弹窗广告、推荐广告
-^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=(start|startup|queryMaterialAdverts|getLoadingPicture|getPopUpInfo|adQuery|advertisement|queryAd|appAd|feedAd|deliveryLayer|deliverLayer).* reject-dict
-
-# 京东广告平台 adx
-^https?:\/\/b?dsp-x\.jd\.com\/adx\/.* reject-200
-
-# 京东金融广告/加载图
-^https?:\/\/ms\.jr\.jd\.com\/gw\/generic\/base\/na\/m\/adInfo.* reject-dict
-^https?:\/\/ms\.jr\.jd\.com\/gw\/generic\/aladdin\/na\/m\/getLoadingPicture.* reject-dict
-
-# 京东到家/京东秒送/外卖相关广告，可能也覆盖京东快递入口里的推荐位
-^https?:\/\/color\.jddj\.com\/.*(ad|advert|banner|popup|recommend|marketing).* reject-dict
-
-# 加强项：物流页推荐/营销位。若查件页面异常，请把下面两行前面加 # 注释掉
-^https?:\/\/api\.m\.jd\.com\/client\.action.*functionId=.*(recommend|marketing|promotion|banner|popup|advert|advertise).* reject-dict
-^https?:\/\/api\.m\.jd\.com\/client\.action.*body=.*(recommend|marketing|promotion|banner|popup|advert|advertise).* reject-dict
+[Script]
+http-response ^https:\/\/lop-proxy\.jd\.com\/(decision|decisionAggregated|getHomePageFeedCards|queryAppHomePageMarketingRecommendRuleConfigInfo|config\/queryContentListWithPage|queryCmsContentInfo|queryHomeMainInfo)(?:\?.*)?$ requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js,timeout=10,tag=京东快递去广告
 
 [MITM]
-hostname = %APPEND% api.m.jd.com, dsp-x.jd.com, bdsp-x.jd.com, ms.jr.jd.com, color.jddj.com
+hostname = %APPEND% lop-proxy.jd.com
