@@ -1,0 +1,35 @@
+#!name=肯德基去广告（6.36.0 抓包修复版）
+#!desc=2026-09-03 按 KFC 6.36.0 抓包重写：拦截 personalAd、AI popup、newpop、adRouter，并屏蔽确认全部为 themeAd 的 newFeeds。保留 apphome6、grid、multiBrand、promotionzone、优惠券、点餐、订单和正常图片资源。
+#!author=ChatGPT
+#!date=2026-09-03
+#!loon_version=3.2.0
+
+[Rule]
+# KFC 广告接口及业务资源直连，避免代理链路造成额外异常
+DOMAIN,dynamicad.kfc.com.cn,DIRECT
+DOMAIN,abplatform.yumchina.com,DIRECT
+DOMAIN,res.kfc.com.cn,DIRECT
+DOMAIN,sares.kfc.com.cn,DIRECT
+DOMAIN,apprn.kfc.com.cn,DIRECT
+DOMAIN,appcommon.kfc.com.cn,DIRECT
+DOMAIN,rnorder.kfc.com.cn,DIRECT
+DOMAIN,apporder.kfc.com.cn,DIRECT
+
+[URL Rewrite]
+# 1. 个性化首页 / 启动广告
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/homePage\/v3\/personalAd(?:\?.*)?$ - reject-dict
+
+# 2. 首页 AI 弹窗 / 活动弹窗
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app5\/homepage\/ai\/popup(?:\?.*)?$ - reject-dict
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app\/newad\/newpop(?:\?.*)?$ - reject-dict
+
+# 3. 广告路由实验接口
+^https?:\/\/abplatform\.yumchina\.com\/abtestplatform\/api\/abtest\/kfc\/adRouter(?:\?.*)?$ - reject-dict
+
+# 4. 首页广告 Feed
+# 2026-09-03 抓包：该接口返回 9 条内容，全部 componentType=themeAd；单独屏蔽此接口，不碰 grid / multiBrand / promotionzone
+^https?:\/\/dynamicad\.kfc\.com\.cn\/api\/app\/newad\/newFeeds(?:\?.*)?$ - reject-dict
+
+[MITM]
+# 只解密明确需要处理的接口；res/sares 是首页配置和图片素材，明确排除
+hostname = %APPEND% dynamicad.kfc.com.cn, abplatform.yumchina.com, -res.kfc.com.cn, -sares.kfc.com.cn
