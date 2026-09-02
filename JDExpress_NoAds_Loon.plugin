@@ -1,16 +1,17 @@
-#!name=京东快递去广告（抓包精确版 v2）
-#!desc=京东快递 iOS 1.8.2：开屏广告改为请求阶段直接返回空结果；并清理首页 Feed、推荐卡和弹窗，保留寄件、查件、优惠券、会员、签到等功能。
+#!name=京东快递去广告（抓包精确版 v3）
+#!desc=2026-09-02 抓包更新：兼容 lop-proxy 双斜杠接口；去开屏、福利弹窗、新人弹窗、京寄卡/PLUS Banner、首页中部营销位；保留寄件、查件、优惠券、小组件帮助和正常资源。
 #!author=ChatGPT
-#!date=2026-08-23
+#!date=2026-09-02
 #!homepage=https://github.com/zihongweiming-ai/loon-rules
 #!loon_version=3.2.0
 
 [Script]
-# 开屏/单场景广告：请求阶段直接返回空数据（最关键）
-http-request ^https:\/\/lop-proxy\.jd\.com\/decision(?:\?.*)?$ requires-body=1,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js?v=20260823-1,timeout=10,tag=京东快递去广告-请求拦截
+# 请求阶段：优先拦截可明确识别的开屏/弹窗，减少闪现与缓存
+http-request ^https:\/\/lop-proxy\.jd\.com\/+decision(?:\?.*)?$ requires-body=1,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js?v=20260902-1,timeout=10,tag=京东快递去广告-Decision请求
+http-request ^https:\/\/lop-proxy\.jd\.com\/+(?:queryAppHomePageMarketingRecommendRuleConfigInfo|home\/queryNewPersonSceneDisplayContent)(?:\?.*)?$ requires-body=1,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js?v=20260902-1,timeout=10,tag=京东快递去广告-弹窗请求
 
-# 响应阶段兜底 + 首页聚合营销内容
-http-response ^https:\/\/lop-proxy\.jd\.com\/(decision|decisionAggregated|getHomePageFeedCards|queryAppHomePageMarketingRecommendRuleConfigInfo|config\/queryContentListWithPage|queryCmsContentInfo|queryHomeMainInfo)(?:\?.*)?$ requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js?v=20260823-1,timeout=10,tag=京东快递去广告-响应清理
+# 响应阶段：营销位精确清理；兼容 / 与 // 两种路径
+http-response ^https:\/\/lop-proxy\.jd\.com\/+(?:decision|decisionAggregated|getHomePageFeedCards|queryAppHomePageMarketingRecommendRuleConfigInfo|config\/queryContentListWithPage|queryCmsContentInfo|queryHomeMainInfo|home\/queryNewPersonSceneDisplayContent)(?:\?.*)?$ requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/zihongweiming-ai/loon-rules/main/JDExpress_NoAds.js?v=20260902-1,timeout=10,tag=京东快递去广告-响应清理
 
 [MITM]
 hostname = %APPEND% lop-proxy.jd.com
