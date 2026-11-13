@@ -1,0 +1,12 @@
+#!name=麦当劳精确去开屏与营销弹窗
+#!desc=依据2026-11-13抓包；仅处理两个广告接口，保留首页、优惠券、点餐、订单。需Loon 3.5.1(978)+及对应域名MITM。
+#!author=Local
+
+[Rewrite]
+# 返回成功的空广告列表；未重用用户标识、traceId或抓包中的私人字段。
+response if ${url} ~= /^https:\/\/api2\.mcd\.cn\/bff\/portal\/home\/splash(?:\?.*)?$/ then response.body.mock("json", `{"code":200,"data":{"list":[]},"message":"请求成功","success":true}`, 200)
+# 只清空营销弹窗容器，不修改优惠券或活动页面。
+response if ${url} ~= /^https:\/\/api2\.mcd\.cn\/bff\/portal\/richpop\/v2(?:\?.*)?$/ then response.body.mock("json", `{"code":200,"data":{},"message":"请求成功","success":true}`, 200)
+
+[Mitm]
+hostname = api2.mcd.cn

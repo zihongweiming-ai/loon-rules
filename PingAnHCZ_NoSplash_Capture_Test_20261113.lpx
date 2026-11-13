@@ -1,0 +1,14 @@
+#!name=平安好车主开屏保守测试
+#!desc=依据2026-11-13抓包：开屏候选getFlash返回单个空格。仅复现此响应，不拦保单、支付、资源下载。需Loon 3.5.1(978)+及hcz-member域名MITM；受主配置绕过/排除限制。
+#!author=Local
+
+[Rewrite]
+# getFlash的业务标识为路径末段；不携带抓包中的原始标识。
+# 原响应为200和一个空格。无广告素材响应可供确认，故属于待手机验证的开屏候选规则。
+response if ${url} ~= /^https:\/\/hcz-member\.pingan\.com\.cn\/micro-api\/toast\/flash\/getFlash\/[^\/?]+\/(?:\?.*)?$/ then response.body.mock("text", ` `, 200)
+# getTopPopBox抓包没有完整响应，不启用猜测结构的拦截。
+# queryHomePagePopBox包含保险业务提示，不处理。
+# 不拦iobs、YourSystemName、ICORE-POLICY-ADMIN等公共资源目录。
+
+[Mitm]
+hostname = hcz-member.pingan.com.cn
